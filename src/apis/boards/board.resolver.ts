@@ -1,6 +1,6 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { BoardService } from './board.service';
-import { CreateBoardInput } from './dto/createBoard.input.dto';
+import { CreateBoardInputDto } from './dto/createBoard.input.dto';
 import { Board } from './entities/board.entity';
 
 @Resolver()
@@ -17,7 +17,7 @@ export class BoardResolver {
         @Args('writer') writer: string,
         @Args('title') title: string,
         @Args('contents') contents: string,
-        @Args('createBoardInput') createBoardInput: CreateBoardInput,
+        @Args('createBoardInput') createBoardInput: CreateBoardInputDto,
     ) {
         return this.boardService.create({
             writer,

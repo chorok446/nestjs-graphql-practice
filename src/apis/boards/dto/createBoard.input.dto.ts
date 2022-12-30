@@ -1,7 +1,7 @@
 import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
-export class CreateBoardInput {
+export class CreateBoardInputDto {
     @Field(() => String)
     writer: string;
 

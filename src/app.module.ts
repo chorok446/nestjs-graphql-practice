@@ -6,19 +6,24 @@ import { BoardModule } from './apis/boards/board.module';
 import { ProductCategoryModule } from './apis/productCategory/productCategory.module';
 import { ProductModule } from './apis/products/product.module';
 import { ConfigModule } from '@nestjs/config';
+import { UserModule } from './apis/users/user.module';
+import { AuthModule } from './apis/auth/auth.module';
 
 @Module({
     imports: [
         BoardModule,
         ConfigModule.forRoot({
             isGlobal: true, // 전체적으로 사용하기 위해
-            envFilePath: `.${process.env.NODE_ENV}.env`,
+            envFilePath: `.dev.env`,
         }),
         ProductCategoryModule,
         ProductModule,
+        UserModule,
+        AuthModule,
         GraphQLModule.forRoot<ApolloDriverConfig>({
             driver: ApolloDriver,
             autoSchemaFile: 'src/commons/graphql/schema.gql',
+            context: ({ req, res }) => ({ req, res }),
         }),
         TypeOrmModule.forRoot({
             type: 'mysql', // 데이터 베이스 타입

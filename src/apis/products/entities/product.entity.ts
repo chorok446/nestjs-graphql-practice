@@ -95,8 +95,6 @@ export class Product {
 - `(products) => products.productTags` :  products 입장에서의 productTags 와의 관계를 명시해 준 것으로, N : M 관계에서는 두 테이블 모두 관계를 나타내 주어야 합니다.
 - `Product[]` : 하나의 태그에 상품이 여러 개 해당될 수 있기에 배열로 나타내는 것입니다.
 
-
--
 - `isSoldOut`  컬럼은 판매 여부를 기록하는 컬럼이기에, 기본 **고정 값( default 값 )을  판매가 되지 않은 상태인 false로 지정하기 위해서 `@Column({ default: false })` 추가해 주었습니다.**
     - 데이터를 저장할 때 초기값을 false로 자동으로 등록하게 해줍니다.
 - **typescript**에서는 배열 타입을 `ProductTag[]`로 작성해 주었지만,

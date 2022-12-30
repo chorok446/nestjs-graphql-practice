@@ -2,34 +2,98 @@ import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
+import { ProductSaleslocation } from '../productSaleslocation/entities/productSalelocation.entity';
+import { ProductTag } from '../productTags/entities/productTag.entity';
 
 @Injectable()
 export class ProductService {
     constructor(
         @InjectRepository(Product)
         private readonly productRepository: Repository<Product>,
+        @InjectRepository(ProductSaleslocation)
+        private readonly productSaleslocationRepository: Repository<ProductSaleslocation>,
+        @InjectRepository(ProductTag)
+        private readonly productTagRepository: Repository<ProductTag>,
     ) {}
 
     async findAll() {
-        return await this.productRepository.find();
+        return await this.productRepository.find({
+            // relations : 배열 안에 넣어서 설정해 주면 관련되어 있는 테이블의 데이터까지 조회 가능.
+            relations: [
+                'productSaleslocation',
+                'productCategory',
+                'productTags',
+            ],
+        });
     }
 
     async findOne({ productId }) {
         return await this.productRepository.findOne({
             where: { id: productId },
+            relations: [
+                'productSaleslocation',
+                'productCategory',
+                'productTags',
+            ],
         });
     }
 
     async create({ createProductInput }) {
-        const result = await this.productRepository.save({
-            ...createProductInput,
+        // 1. 상품만 등록하는 경우
+        // const result = await this.productRepository.save({
+        //   ...createProductInput,
 
-            // 하나하나 직접 나열하는 방식
-            // name: createProductInput.name,
-            // description: createProductInput.description,
-            // price: createProductInput.price,
+        //   // 하나하나 직접 나열하는 방식
+        //   // name: createProductInput.name,
+        //   // description: createProductInput.description,
+        //   // price: createProductInput.price,
+        // });
+
+        //
+        //
+        // 2. 상품과 상품거래위치를 같이 등록하는 경우
+        const {
+            productSaleslocation,
+            productCategoryId,
+            productTags,
+            ...product
+        } = createProductInput;
+
+        const result = await this.productSaleslocationRepository.save({
+            ...productSaleslocation,
         });
-        return result;
+
+        // productTags // ["#전자제품", "#영등포", "#컴퓨터"]
+        const result2 = []; // [{name: ..., id: ...}, {name: ..., id: ...}, {name: ..., id: ...}]
+        for (let i = 0; i < productTags.length; i++) {
+            const tagname = productTags[i].replace('#', '');
+
+            // 이미 등록된 태그인지 확인해보기
+            const prevTag = await this.productTagRepository.findOne({
+                name: tagname,
+            });
+
+            // 기존에 태그가 존재한다면
+            if (prevTag) {
+                result2.push(prevTag);
+
+                // 기존에 태그가 없었다면
+            } else {
+                const newTag = await this.productTagRepository.save({
+                    name: tagname,
+                });
+                result2.push(newTag);
+            }
+        }
+
+        const result3 = await this.productRepository.save({
+            ...product,
+            productSaleslocation: result, // result 통째로 넣기 vs id만 넣기
+            productCategory: { id: productCategoryId },
+            productTags: result2,
+        });
+
+        return result3;
     }
 
     async update({ productId, updateProductInput }) {
