@@ -15,7 +15,7 @@ bootstrap();
 /*
 최종적으로 실행시켜주는 파일은 `main.ts` 파일 내에 존재하는 app 부분이기에,
 
-`app.useGlobalPipes`를 사용해여 **ValidationPipe를 연결**시켜 주셔야 합니다.
+app.useGlobalPipes 사용해서 **ValidationPipe를 연결시켜 줘야함
 
 `Pipe`는 **데이터가 오고가는 흐름에 있어서 데이터 검증과 필터링을 해주는 역할을 합니다.
 

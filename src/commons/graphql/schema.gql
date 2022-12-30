@@ -23,7 +23,8 @@ type ProductTag {
 type User {
   id: String!
   email: String!
-  password: String!
+  name: String!
+  age: Int!
 }
 
 type ProductSaleslocation {
@@ -56,30 +57,45 @@ type Query {
   fetchBoards: [Board!]!
   fetchProducts: [Product!]!
   fetchProduct(productId: String!): Product!
+  fetchUser: String!
 }
 
 type Mutation {
-  createBoard(writer: String!, title: String!, contents: String!, createBoardInput: CreateBoardInput!): String!
+  createBoard(writer: String!, title: String!, contents: String!, createBoardInput: CreateBoardInputDto!): String!
   createProductCategory(name: String!): ProductCategory!
-  createProduct(createProductInput: CreateProductInput!): Product!
+  createProduct(createProductInput: CreateProductInputDto!): Product!
   deleteProduct(productId: String!): Boolean!
-  updateProduct(productId: String!, updateProductInput: UpdateProductInput!): Product!
+  updateProduct(productId: String!, updateProductInput: UpdateProductInputDto!): Product!
+  createUser(email: String!, password: String!, name: String!, age: Float!): User!
+  login(email: String!, password: String!): String!
 }
 
-input CreateBoardInput {
+input CreateBoardInputDto {
   writer: String!
   title: String!
   contents: String!
 }
 
-input CreateProductInput {
+input CreateProductInputDto {
   name: String!
   description: String!
   price: Int!
+  productSaleslocation: ProductSaleslocationInput!
+  productCategoryId: String!
+  productTags: [String!]!
 }
 
-input UpdateProductInput {
-  name: String
-  description: String
-  price: Int
+input ProductSaleslocationInput {
+  address: String!
+  addressDetail: String!
+  lat: Float!
+  lng: Float!
+  meetingTime: DateTime!
+}
+
+input UpdateProductInputDto {
+  name: String!
+  description: String!
+  price: Int!
+  productSaleslocation: ProductSaleslocationInput!
 }

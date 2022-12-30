@@ -1,8 +1,8 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Product } from './entities/product.entity';
 import { ProductService } from './product.service';
-import { CreateProductInput } from './dto/createProduct.input.dto';
-import { UpdateProductInput } from './dto/updateproduct.input.dto';
+import { UpdateProductInputDto } from './dto/updateProduct.input.dto';
+import { CreateProductInputDto } from './dto/createProduct.input.dto';
 
 @Resolver()
 export class ProductResolver {
@@ -23,7 +23,7 @@ export class ProductResolver {
 
     @Mutation(() => Product)
     createProduct(
-        @Args('createProductInput') createProductInput: CreateProductInput, // dto로 유효성 검사
+        @Args('createProductInput') createProductInput: CreateProductInputDto, // dto로 유효성 검사
     ) {
         return this.productService.create({ createProductInput });
     }
@@ -39,7 +39,7 @@ export class ProductResolver {
     @Mutation(() => Product) // 어떤게 업데이트 되었는지 알아야하기 때문에 return값 Product로 지정
     async updateProduct(
         @Args('productId') productId: string,
-        @Args('updateProductInput') updateProductInput: UpdateProductInput,
+        @Args('updateProductInput') updateProductInput: UpdateProductInputDto,
     ) {
         // 판매 완료가 되었는지 확인해보기 만약 함수 실행시 에러 발생시 로직 중단되서 수정되지 않음
         await this.productService.checkSoldout({ productId });
@@ -53,13 +53,7 @@ export class ProductResolver {
 }
 
 /*
-
-
-
-
-- `@Args`를 사용해 updateProductInput 를 받아서 수정하고 싶은 값 들을 수정해 줄 것입니다.
-
-    따라서 **updateProductInput은 수정 대상**이 됩니다.
-
-- checkSoldout 함수를 실행할 때 `에러가 발생`된다면 **함수는 중단되어 상품 수정이 일어나지 않고 끝**나게 됩니다.
+`@Args`를 사용해 updateProductInput 를 받아서 수정하고 싶은 값 들을 수정해 줄 것입니다.
+따라서 **updateProductInput은 수정 대상**이 됩니다.
+checkSoldout 함수를 실행할 때 `에러가 발생`된다면 **함수는 중단되어 상품 수정이 일어나지 않고 끝**나게 됩니다.
  */
