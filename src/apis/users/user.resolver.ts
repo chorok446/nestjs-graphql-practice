@@ -25,7 +25,7 @@ export class UserResolver {
         return this.userService.create({ email, hashedPassword, name, age });
     }
 
-    @UseGuards(GqlAuthAccessGuard) // Guard를 통해서 인가
+    @UseGuards(GqlAuthAccessGuard) // Guard를 통해서 인가 로그인 한 사람만 본인의 프로필을 조회할 수 있기에 로그인을 했는지 안 했는지 검증
     @Query(() => String)
     fetchUser(
         @CurrentUser() currentUser: any, //

@@ -3,6 +3,8 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 @ObjectType()
+@Entity()
+@ObjectType()
 export class User {
     @PrimaryGeneratedColumn('uuid')
     @Field(() => String)
@@ -23,4 +25,8 @@ export class User {
     @Column()
     @Field(() => Int)
     age: number;
+
+    @Column({ default: 0 }) // 포인트 기본값 0
+    @Field(() => Int)
+    point: number;
 }

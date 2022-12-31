@@ -8,14 +8,16 @@ import { ProductModule } from './apis/products/product.module';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './apis/users/user.module';
 import { AuthModule } from './apis/auth/auth.module';
+import { PointTransactionModule } from './apis/pointTransaction/pointTransaction.module';
 
 @Module({
     imports: [
         BoardModule,
         ConfigModule.forRoot({
             isGlobal: true, // 전체적으로 사용하기 위해
-            envFilePath: `.dev.env`,
+            envFilePath: `.${process.env.NODE_ENV}.env`,
         }),
+        PointTransactionModule,
         ProductCategoryModule,
         ProductModule,
         UserModule,
@@ -32,7 +34,7 @@ import { AuthModule } from './apis/auth/auth.module';
             username: process.env.DB_USERNAME, // mysql은 기본 user는 root로 지정
             password: process.env.DB_PASSWORD, // 본인의 mysql password
             database: process.env.DB_NAME, // 연결할 데이터 베이스명
-            entities: [__dirname + '/apis/**/*.entity.*'], //   데이터 베이스와 연결할 entity EX) entities: [Board] 이런식으로 넣어도 되나 많이 넣을시엔 지금 방식처럼 경로 확장자 방식이 나음
+            entities: [__dirname + '/apis/**/*.entity.*'], //   데이터 베이스와 연결할 entity,  EX) entities: [Board] 이렇게 넣어도 됨
             synchronize: true, // entity 테이블을 데이터베이스와 동기화할 것인지
             logging: true, // 콘솔 창에 log를 표시할 것인지
         }),
