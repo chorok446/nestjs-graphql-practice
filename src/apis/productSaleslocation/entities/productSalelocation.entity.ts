@@ -22,21 +22,12 @@ export class ProductSaleslocation {
     @Column()
     @Field(() => Float)
     lat: number;
-
+    // 위도로 타입을 number로 작성
     @Column()
     @Field(() => Float)
     lng: number;
-
+    //경도로 타입을 number로 작성
     @Column()
     @Field(() => Date)
     meetingTime: Date;
 }
-
-/*
-`lat` : 위도로 타입을 number로 작성하였습니다.
-`lng` : 경도로 타입을 number로 작성하였습니다.
-`@Column({ type: 'timestamp' })` : 시간 관련한 데이터 timestamp 타입을 지정해 주었습니다.
-- `Float type` : 소수점이 들어가는 숫자일 경우 사용합니다.
-- `Date type` : 날짜 타입을 지정해 줄 때 사용합니다.
-
- */

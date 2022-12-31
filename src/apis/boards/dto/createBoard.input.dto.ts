@@ -1,6 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql';
 
-@InputType()
+@InputType() // gql Input 타입
 export class CreateBoardInputDto {
     @Field(() => String)
     writer: string;
@@ -11,5 +11,3 @@ export class CreateBoardInputDto {
     @Field(() => String)
     contents: string;
 }
-
-//@InputType()를 사용하여 gql 에게 “이건 InputType 이야" 라고 알려줍니다.

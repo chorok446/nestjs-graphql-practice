@@ -28,9 +28,9 @@ export class ProductResolver {
         return this.productService.create({ createProductInput });
     }
 
-    // - `수정`을 할 때는 수정 결과를 통해 어떤 상품에서 어떤 부분이 수정이 되었는지 알려줄 수 있었지만
-    //     따라서, @Mutation 의 return 값이 Product** 였지만
-    //     하지만, `삭제`를 하게 되면 ****DB에서 삭제되어 없어지므로 return 값을 Product로 가지고 올 수 없기 때문에 그 결과는 ‘삭제가 완료되었습니다' 의 `String` 이나 true, false 의 `Boolean` 값을 통해 알려주게됨
+    // 수정을 할 때는 수정 결과를 통해 어떤 상품에서 어떤 부분이 수정이 되었는지 알려줄 수 있지만 삭제를 하면 Product가 남지 않음 따라서, @Mutation 의 return 값이 Product 였지만
+    // 삭제를 하게 되면DB에서 삭제되어 없어지므로 return 값을 Product로 가지고 올 수 없기 때문에
+    // 그 결과는 ‘삭제가 완료되었습니다' 의 `String` 이나 true, false 의 `Boolean` 값을 통해 성공여부만 알려주게됨
     @Mutation(() => Boolean)
     deleteProduct(@Args('productId') productId: string) {
         return this.productService.delete({ productId });
@@ -39,9 +39,9 @@ export class ProductResolver {
     @Mutation(() => Product) // 어떤게 업데이트 되었는지 알아야하기 때문에 return값 Product로 지정
     async updateProduct(
         @Args('productId') productId: string,
-        @Args('updateProductInput') updateProductInput: UpdateProductInputDto,
+        @Args('updateProductInput') updateProductInput: UpdateProductInputDto, // 인자 타입
     ) {
-        // 판매 완료가 되었는지 확인해보기 만약 함수 실행시 에러 발생시 로직 중단되서 수정되지 않음
+        // 판매 완료가 되었는지 확인해보기 만약 함수 실행중 에러 발생시 로직 중단되서 수정되지 않음
         await this.productService.checkSoldout({ productId });
 
         // 수정하기
@@ -51,9 +51,3 @@ export class ProductResolver {
         });
     }
 }
-
-/*
-`@Args`를 사용해 updateProductInput 를 받아서 수정하고 싶은 값 들을 수정해 줄 것입니다.
-따라서 **updateProductInput은 수정 대상**이 됩니다.
-checkSoldout 함수를 실행할 때 `에러가 발생`된다면 **함수는 중단되어 상품 수정이 일어나지 않고 끝**나게 됩니다.
- */

@@ -25,7 +25,7 @@ export class UserResolver {
         return this.userService.create({ email, hashedPassword, name, age });
     }
 
-    @UseGuards(GqlAuthAccessGuard)
+    @UseGuards(GqlAuthAccessGuard) // Guard를 통해서 인가
     @Query(() => String)
     fetchUser(
         @CurrentUser() currentUser: any, //
