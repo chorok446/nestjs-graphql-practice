@@ -2,7 +2,7 @@
 
 import { Field, InputType, Int } from '@nestjs/graphql';
 import { Min } from 'class-validator';
-import { ProductSaleslocationInput } from '../../productSaleslocation/dto/ProductSaleslocationInput';
+import { ProductSaleslocationInputDto } from '../../productSaleslocation/dto/ProductSaleslocation.input.dto';
 
 @InputType()
 export class UpdateProductInputDto {
@@ -16,6 +16,6 @@ export class UpdateProductInputDto {
     @Field(() => Int)
     price: number;
 
-    @Field(() => ProductSaleslocationInput)
-    productSaleslocation: ProductSaleslocationInput;
+    @Field(() => ProductSaleslocationInputDto)
+    productSaleslocation: ProductSaleslocationInputDto;
 }

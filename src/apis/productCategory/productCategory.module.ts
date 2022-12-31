@@ -5,10 +5,7 @@ import { ProductCategoryResolver } from './productCategory.resolver';
 import { ProductCategoryService } from './productCategory.service';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([ProductCategory])],
-    providers: [
-        ProductCategoryResolver, //import 옵션에 TypeOrmModule.forFeature([ProductCategory])을 추가해 주세요. TypeOrmModule.forFeature메서드는 엔티티를 전달합니다.
-        ProductCategoryService,
-    ],
+    imports: [TypeOrmModule.forFeature([ProductCategory])], // 엔티티 전달
+    providers: [ProductCategoryResolver, ProductCategoryService],
 })
 export class ProductCategoryModule {}
