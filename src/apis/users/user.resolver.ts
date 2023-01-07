@@ -1,7 +1,6 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { User } from './entities/user.entity';
 import { UserService } from './user.service';
-
 import * as bcrypt from 'bcrypt';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthAccessGuard } from '../auth/gql/gql-auth.guard';
@@ -30,6 +29,7 @@ export class UserResolver {
     fetchUser(
         @CurrentUser() currentUser: any, //
     ) {
+        // 유저정보 접근
         console.log('fetchUser 실행 완료!!!');
         console.log('유저정보는??!!!', currentUser);
         return 'fetchUser 실행 완료!!!';

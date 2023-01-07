@@ -1,11 +1,22 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { BoardService } from './board.service';
-import { CreateBoardInputDto } from './dto/createBoard.input.dto';
 import { Board } from './entities/board.entity';
+import { Cache } from 'cache-manager';
+import { CACHE_MANAGER, Inject } from '@nestjs/common';
+import { CreateBoardInputDto } from './dto/createBoard.input.dto';
 
 @Resolver()
 export class BoardResolver {
-    constructor(private readonly boardService: BoardService) {}
+    constructor(
+        private readonly boardService: BoardService,
+        @Inject(CACHE_MANAGER)
+        private readonly cacheManager: Cache,
+    ) {}
+
+    // @Query(() => String)
+    // getHello() {
+    //   return this.boardService.aaa();
+    // }
 
     @Query(() => [Board])
     fetchBoards() {
@@ -13,20 +24,30 @@ export class BoardResolver {
     }
 
     @Mutation(() => String)
-    createBoard(
-        @Args('writer') writer: string, //  gql arguments 정의
-
-        @Args('title') title: string, // `@Arg()` 안은 gql 타입, 그 뒤는 타입스크립트의 타입
+    async createBoard(
+        @Args({ name: 'writer', nullable: true }) writer: string,
+        @Args('title') title: string,
         @Args('contents') contents: string,
         @Args('createBoardInput') createBoardInput: CreateBoardInputDto,
     ) {
-        // - 반환 메시지는 String 타입으로 반환되기 때문에 변경안함
-        // 전달인자 서비스로 전달해주면 서비스에서 처리
-        return this.boardService.create({
-            writer,
-            title,
-            contents,
-            createBoardInput,
+        // 1. 캐시에 등록하는 연습
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        await this.cacheManager.set('aaa', createBoardInput, {
+            ttl: 0,
         });
+
+        // 2. 캐시에서 조회하는 연습
+        const mycache = await this.cacheManager.get('aaa');
+        console.log(mycache);
+
+        return '캐시 테스트';
+        // 레디스 연습
+        // console.log(args);
+        // console.log(writer);
+        // console.log(title);
+        // console.log(contents);
+        // console.log(createBoardInput);
+        // return this.boardService.create();
     }
 }

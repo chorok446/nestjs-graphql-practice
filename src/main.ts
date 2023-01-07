@@ -1,11 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
 import { HttpExceptionFilter } from './commons/filter/http-excption.filter';
+
+// import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
-    app.useGlobalPipes(new ValidationPipe()); // 추가
+    // app.use(graphqlUploadExpress());
     app.useGlobalFilters(new HttpExceptionFilter());
     await app.listen(3000);
 }

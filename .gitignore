@@ -36,3 +36,5 @@ lerna-debug.log*
 #environment
 .dev.env
 .test.env
+
+gcp-file-storage.json
